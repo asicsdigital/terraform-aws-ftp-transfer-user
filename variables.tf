@@ -8,6 +8,9 @@ variable "ssh_public_keys" {
   description = "List of raw SSH public keys."
 }
 
+variable "ssh_public_keys_length" {
+}
+
 variable "transfer_server_id" {
   type        = string
   description = "ID of the transfer server to use."
