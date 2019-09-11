@@ -12,7 +12,7 @@ data "aws_s3_bucket" "bucket" {
 
 resource "aws_transfer_user" "transfer_user" {
   server_id      = "${var.transfer_server_id}"
-  role           = "${aws_iam_role.transfer_server_assume_role.arn}"
+  role           = "${aws_iam_role.transfer_user_assume_role.arn}"
   home_directory = "/${data.aws_s3_bucket.bucket.id}/${var.s3_bucket_folder}"
   user_name      = "${var.username}"
 }

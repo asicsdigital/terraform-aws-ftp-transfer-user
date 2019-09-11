@@ -26,3 +26,8 @@ variable "s3_bucket_folder" {
 variable "access_type" {
   description = "Which permissions user should have on sftp"
 }
+
+variable "iam_name" {
+  default     = ""
+  description = "IAM name"
+}

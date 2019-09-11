@@ -16,7 +16,7 @@ locals {
   }
 }
 
-data "aws_iam_policy_document" "transfer_server_assume_role" {
+data "aws_iam_policy_document" "transfer_user_assume_role" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "transfer_server_assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "transfer_server_assume_policy" {
+data "aws_iam_policy_document" "transfer_user_assume_policy" {
   statement {
     effect = "Allow"
 
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "transfer_server_assume_policy" {
       variable = "s3:prefix"
 
       values = [
-        "${var.s3_bucket_folder == "" ? "*" : var.s3_bucket_folder}/*",
+        "${var.s3_bucket_folder == "" ? "*" : "${var.s3_bucket_folder}/*"}",
       ]
     }
   }
@@ -71,13 +71,13 @@ data "aws_iam_policy_document" "transfer_server_assume_policy" {
 #   special = false
 # }
 
-resource "aws_iam_role" "transfer_server_assume_role" {
-  name               = "transfer-${var.transfer_server_id}-${var.username}"
-  assume_role_policy = "${data.aws_iam_policy_document.transfer_server_assume_role.json}"
+resource "aws_iam_role" "transfer_user_assume_role" {
+  name               = "${var.iam_name}-user-role"
+  assume_role_policy = "${data.aws_iam_policy_document.transfer_user_assume_role.json}"
 }
 
-resource "aws_iam_role_policy" "transfer_server_policy" {
-  name   = "transfer-${var.transfer_server_id}-${var.username}"
-  role   = "${aws_iam_role.transfer_server_assume_role.name}"
-  policy = "${data.aws_iam_policy_document.transfer_server_assume_policy.json}"
+resource "aws_iam_role_policy" "transfer_user_policy" {
+  name   = "${var.iam_name}-user-policy"
+  role   = "${aws_iam_role.transfer_user_assume_role.name}"
+  policy = "${data.aws_iam_policy_document.transfer_user_assume_policy.json}"
 }
