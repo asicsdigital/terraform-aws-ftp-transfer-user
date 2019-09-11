@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "transfer_server_assume_policy" {
     ]
 
     resources = [
-      data.aws_s3_bucket.bucket.arn,
+      "${data.aws_s3_bucket.bucket.arn}",
     ]
 
     condition {
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "transfer_server_assume_policy" {
       variable = "s3:prefix"
 
       values = [
-        "${var.s3_bucket_folder}" == "" ? "*" : "${var.s3_bucket_folder}/*",
+        "${var.s3_bucket_folder == "" ? "*" : var.s3_bucket_folder}/*",
       ]
     }
   }
@@ -56,8 +56,8 @@ data "aws_iam_policy_document" "transfer_server_assume_policy" {
     actions = "${local.s3_actions[var.access_type]}"
 
     resources = [
-      "${var.s3_bucket_folder}" == "" ? "${data.aws_s3_bucket.bucket.arn}/*" : "${data.aws_s3_bucket.bucket.arn}/${var.s3_bucket_folder}/*",
-      "${var.s3_bucket_folder}" == "" ? "${data.aws_s3_bucket.bucket.arn}" : "${data.aws_s3_bucket.bucket.arn}/${var.s3_bucket_folder}",
+      "${var.s3_bucket_folder == "" ? "${data.aws_s3_bucket.bucket.arn}/*" : "${data.aws_s3_bucket.bucket.arn}/${var.s3_bucket_folder}/*"}",
+      "${var.s3_bucket_folder == "" ? data.aws_s3_bucket.bucket.arn : "${data.aws_s3_bucket.bucket.arn}/${var.s3_bucket_folder}"}",
     ]
   }
 }
