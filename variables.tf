@@ -31,3 +31,8 @@ variable "iam_name" {
   default     = ""
   description = "IAM name"
 }
+
+variable "transfer_server_enable_password_auth" {
+  description = "Boolean for whether this transfer server uses password auth"
+  default     = false
+}
