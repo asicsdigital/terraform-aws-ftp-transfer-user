@@ -21,6 +21,32 @@ resource "aws_transfer_user" "transfer_user" {
 resource "aws_transfer_ssh_key" "transfer_ssh_key" {
   count     = "${var.transfer_server_enable_password_auth ? 0 : var.ssh_public_keys_length}"
   server_id = "${var.transfer_server_id}"
-  user_name = "${aws_transfer_user.transfer_user.user_name}"
+  user_name = "${var.username}"
   body      = "${var.ssh_public_keys[count.index]}"
+}
+
+resource "aws_secretsmanager_secret" "user_secret" {
+  count = "${var.transfer_server_enable_password_auth ? 1 : 0}"
+  name  = "SFTP/${var.username}"
+}
+
+
+resource "random_id" "user_password_random_id" {
+  count       = "${var.transfer_server_enable_password_auth ? 1 : 0}"
+  byte_length = 32
+}
+
+locals {
+  user_secret = {
+    Password      = "${random_id.user_password_random_id.b64}"
+    Role          = "${aws_iam_role.transfer_user_assume_role.arn}"
+    HomeDirectory = "/${var.s3_bucket_name}/${var.s3_bucket_folder}${var.s3_bucket_folder == "" ? "" : "/"}"
+    PublicKey     = "${var.ssh_public_keys[0]}" # TODO add warning if more than one
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "example" {
+  count         = "${var.transfer_server_enable_password_auth ? 1 : 0}"
+  secret_id     = "${aws_secretsmanager_secret.user_secret.id}"
+  secret_string = "${jsonencode(local.user_secret)}"
 }
