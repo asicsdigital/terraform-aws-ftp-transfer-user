@@ -28,3 +28,7 @@ variable "access_type" {
   type        = string
   description = "Which permissions user should have on sftp"
 }
+
+variable "iam_name" {
+   type = string
+}
