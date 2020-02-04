@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "transfer_user_assume_policy" {
 # }
 
 resource "aws_iam_role" "transfer_user_assume_role" {
-  name               = "${var.iam_name}-user-name"
+  name               = "${var.iam_name}-user-role"
   assume_role_policy = data.aws_iam_policy_document.transfer_user_assume_role.json
 }
 
