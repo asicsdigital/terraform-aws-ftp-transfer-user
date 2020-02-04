@@ -36,11 +36,6 @@ variable "access_type" {
 
 variable "iam_name" {
    type = string
-   default     = ""
-}
-
-variable "policy_name" {
-    type = string
 }
 
 variable "transfer_server_enable_password_auth" {
