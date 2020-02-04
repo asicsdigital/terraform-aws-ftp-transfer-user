@@ -1,22 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # CREATE IAM POLICY RULES FOR SFTP BUCKET
 # ---------------------------------------------------------------------------------------------------------------------
-
-locals {
-  s3_actions = {
-    "rw" = [
-      "s3:PutObject",
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-    ]
-    "ro" = [
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-    ]
-  }
-}
-
-data "aws_iam_policy_document" "transfer_server_assume_role" {
+data "aws_iam_policy_document" "transfer_user_assume_role" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -28,7 +13,7 @@ data "aws_iam_policy_document" "transfer_server_assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "transfer_server_assume_policy" {
+data "aws_iam_policy_document" "transfer_user_assume_policy" {
   statement {
     effect = "Allow"
 
@@ -71,13 +56,13 @@ data "aws_iam_policy_document" "transfer_server_assume_policy" {
 #   special = false
 # }
 
-resource "aws_iam_role" "transfer_server_assume_role" {
-  name               = "${var.iam_name}-${var.username}"
-  assume_role_policy = data.aws_iam_policy_document.transfer_server_assume_role.json
+resource "aws_iam_role" "transfer_user_assume_role" {
+  name               = var.iam_name
+  assume_role_policy = data.aws_iam_policy_document.transfer_user_assume_role.json
 }
 
-resource "aws_iam_role_policy" "transfer_server_policy" {
-  name   = "transfer-${var.transfer_server_id}-${var.username}"
-  role   = aws_iam_role.transfer_server_assume_role.name
-  policy = data.aws_iam_policy_document.transfer_server_assume_policy.json
+resource "aws_iam_role_policy" "transfer_user_policy" {
+  name   = var.policy_name
+  role   = aws_iam_role.transfer_user_assume_role.name
+  policy = data.aws_iam_policy_document.transfer_user_assume_policy.json
 }
