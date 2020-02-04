@@ -14,6 +14,6 @@ locals {
     Password      = var.transfer_server_enable_password_auth ? random_id.user_password_random_id[0].b64 : ""
     Role          = aws_iam_role.transfer_user_assume_role.arn
     HomeDirectory = "/${var.s3_bucket_name}/${var.s3_bucket_folder}${var.s3_bucket_folder == "" ? "" : "/"}"
-    PublicKey     = var.ssh_public_keys[0] # TODO add warning if more than one
+    PublicKey     = var.transfer_server_enable_password_auth ? "" : var.ssh_public_keys[0] # TODO add warning if more than one
   }
 }

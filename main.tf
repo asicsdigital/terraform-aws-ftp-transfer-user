@@ -37,6 +37,6 @@ resource "random_id" "user_password_random_id" {
 
 resource "aws_secretsmanager_secret_version" "example" {
   count         = var.transfer_server_enable_password_auth ? 1 : 0
-  secret_id     = aws_secretsmanager_secret.user_secret[count.index].id 
+  secret_id     = aws_secretsmanager_secret.user_secret[count.index].id
   secret_string = jsonencode(local.user_secret)
 }

@@ -10,6 +10,7 @@ variable "ssh_public_keys" {
 }
 
 variable "ssh_public_keys_length" {
+  default = 0
 }
 
 variable "transfer_server_id" {
