@@ -5,7 +5,6 @@ variable "username" {
 
 variable "ssh_public_keys" {
   type        = list(string)
-  default     = []
   description = "List of raw SSH public keys."
 }
 
