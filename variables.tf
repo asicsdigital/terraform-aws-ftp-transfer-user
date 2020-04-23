@@ -8,6 +8,10 @@ variable "ssh_public_keys" {
   description = "List of raw SSH public keys."
 }
 
+variable "ssh_public_keys_length" {
+  default = 0
+}
+
 variable "transfer_server_id" {
   type        = string
   description = "ID of the transfer server to use."
@@ -31,4 +35,9 @@ variable "access_type" {
 
 variable "iam_name" {
    type = string
+}
+
+variable "transfer_server_enable_password_auth" {
+  description = "Boolean for whether this transfer server uses password auth"
+  default     = false
 }
